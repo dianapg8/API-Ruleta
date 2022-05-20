@@ -1,6 +1,8 @@
 package com.ibm.academia.apiruleta.controllers;
 
 import com.ibm.academia.apiruleta.data.DummyData;
+import com.ibm.academia.apiruleta.enums.TipoApuesta;
+import com.ibm.academia.apiruleta.model.entities.Apuesta;
 import com.ibm.academia.apiruleta.services.RuletaDAO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +53,7 @@ class RuletacontrollerTest
     @Test
     @DisplayName("Retorna la apuesta creada y un estado 'Acepted'")
     void apostarRuleta() throws Exception{
-        when(ruletaDAO.apostar(1,"negro",8000d)).thenReturn(DummyData.apuesta01());
+        when(ruletaDAO.apostar(new Apuesta(1, "negro", TipoApuesta.COLOR, 1000d))).thenReturn(DummyData.apuesta01());
         mockMvc.perform(post("/api/v1/ruleta/apostar/?id=1&valorApuesta=negro&monto=8000")
                         .accept(MediaType.APPLICATION_JSON).content(DummyData.apuesta01Json()))
                 .andExpect(status().isAccepted());

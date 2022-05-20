@@ -5,6 +5,7 @@ import com.ibm.academia.apiruleta.exceptions.DatosInvalidos;
 import com.ibm.academia.apiruleta.exceptions.NoExisteRuleta;
 import com.ibm.academia.apiruleta.exceptions.RuletaCerrada;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,38 +19,34 @@ import java.util.Map;
 public class RuletaException
 {
     @ExceptionHandler(value = ApuestaCancelada.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String,Object> apuestasCanceladas(ApuestaCancelada ac){
+    public ResponseEntity<?> apuestasCanceladas(ApuestaCancelada ac){
         Map<String, Object> response = new HashMap<>();
         response.put("message", ac.getMessage());
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = DatosInvalidos.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String,Object> datosInvalidos (DatosInvalidos di){
+    public ResponseEntity<Object> datosInvalidos (DatosInvalidos di){
         Map<String, Object> response = new HashMap<>();
         response.put("message", di.getMessage());
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = NoExisteRuleta.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String,Object> noExisteRuleta(NoExisteRuleta ne){
+    public ResponseEntity<Object> noExisteRuleta(NoExisteRuleta ne){
         Map<String, Object> response = new HashMap<>();
         response.put("message", ne.getMessage());
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = RuletaCerrada.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String,Object> ruletaCerrada(RuletaCerrada rc){
+    public ResponseEntity<Object> ruletaCerrada(RuletaCerrada rc){
         Map<String, Object> response = new HashMap<>();
         response.put("message", rc.getMessage());
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = MissingServletRequestParameterException.class)
+    /*@ExceptionHandler(value = MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> missingRequestParameters(MissingServletRequestParameterException ex) {
         Map<String, Object> response = new HashMap<>();
@@ -70,5 +67,5 @@ public class RuletaException
         response.put("paramTypeExpected", ex.getParameter().getParameterType());
         response.put("paramTypeGot", ex.getValue().getClass().getName());
         return response;
-    }
+    }*/
 }

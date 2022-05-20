@@ -8,6 +8,7 @@ import com.ibm.academia.apiruleta.model.entities.Ruleta;
 import com.ibm.academia.apiruleta.repositories.ApuestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,38 +25,36 @@ public class ApuestaDAOImpl implements ApuestaDAO
         this.repository = repository;
     }
 
-
     @Override
     public Apuesta guardar(Apuesta entidad) {
         return repository.save(entidad);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Iterable<Apuesta> buscarApuestasPorRuletaId(Integer id) {
         return repository.buscarApuestasPorRuletaId(id);
     }
 
-
     @Override
     public Apuesta crearApuesta(String valorApuesta, Double monto, Ruleta ruleta) {
-        Apuesta apuestaGuardada;
-        if(validarColorApuesta(valorApuesta) && validarMontoApuesta(monto)){
-            Apuesta nuevaApuesta = new Apuesta(valorApuesta.toUpperCase(), TipoApuesta.COLOR,monto,ruleta);
-            apuestaGuardada =guardar(nuevaApuesta);
-        }else {
-            try{
+        Apuesta apuestaGuardada = null;
+        if(validarMontoApuesta(monto)) {
+            if (validarColorApuesta(valorApuesta)) {
+                Apuesta nuevaApuesta = new Apuesta(valorApuesta.toUpperCase(), TipoApuesta.COLOR, monto, ruleta);
+                apuestaGuardada = guardar(nuevaApuesta);
+            } else {
                 Integer numeroApuesta = Integer.parseInt(valorApuesta);
-                if(validarNumeroApuesta(numeroApuesta) && validarMontoApuesta(monto)){
-                    Apuesta nuevaApuesta = new Apuesta(valorApuesta,TipoApuesta.NUMERO,monto,ruleta);
+                if (validarNumeroApuesta(numeroApuesta) && validarMontoApuesta(monto)) {
+                    Apuesta nuevaApuesta = new Apuesta(valorApuesta, TipoApuesta.NUMERO, monto, ruleta);
                     apuestaGuardada = guardar(nuevaApuesta);
-                }
-                else
-                    throw new DatosInvalidos("No es posible apostar a este valor");
-
-            }catch (NumberFormatException e) {
-                throw new DatosInvalidos("No es posible apostar a este valor");
+                } else
+                    throw new DatosInvalidos("El valor debe ser color negro o rojo o un entero entre 0 y 36");
             }
         }
+        else
+            throw new DatosInvalidos("El monto debe ser menor a 10,000");
+
         return apuestaGuardada;
     }
 

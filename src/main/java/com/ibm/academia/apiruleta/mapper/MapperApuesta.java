@@ -13,6 +13,5 @@ public class MapperApuesta {
         apuestaDTO.setIdRuletaApuesta(apuesta.getRuleta().getId());
 
         return apuestaDTO;
-
     }
 }

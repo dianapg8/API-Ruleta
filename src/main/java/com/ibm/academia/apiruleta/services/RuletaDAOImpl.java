@@ -37,12 +37,10 @@ public class RuletaDAOImpl implements RuletaDAO {
         Optional<Ruleta> oRuleta = repository.findById(id);
         Ruleta ruletaEncontrada;
 
-        if(oRuleta.isPresent()){
+        if(oRuleta.isPresent())
             ruletaEncontrada=oRuleta.get();
-        }
-        else{
+        else
             throw new NoExisteRuleta("La ruleta con el ID " + id + " no existe.");
-        }
 
         return ruletaEncontrada;
     }
@@ -63,14 +61,14 @@ public class RuletaDAOImpl implements RuletaDAO {
     }
 
     @Override
-    public Apuesta apostar(Integer idRuleta, String valorApuesta, Double monto) {
-        Ruleta ruleta = buscarPorId(idRuleta);
+    public Apuesta apostar(Apuesta apuesta) {
+        Ruleta ruleta = buscarPorId(apuesta.getId());
         Apuesta nuevaApuesta;
 
         if(ruleta.getEstaAbierta())
-            nuevaApuesta=apuestaDAO.crearApuesta(valorApuesta,monto,ruleta);
+            nuevaApuesta=apuestaDAO.crearApuesta(apuesta.getValorApuesta(),apuesta.getMonto(),ruleta);
         else
-            throw new RuletaCerrada("No es posibles apostar a esta ruleta");
+            throw new RuletaCerrada("Esta ruleta no esta abierta a apuestas");
 
         return nuevaApuesta;
     }

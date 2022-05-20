@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface ApuestaRepository  extends CrudRepository<Apuesta, Integer> {
     @Query("select a from Apuesta a where a.ruleta.id=?1")
     Iterable<Apuesta> buscarApuestasPorRuletaId(Integer idRuleta);
-
 }

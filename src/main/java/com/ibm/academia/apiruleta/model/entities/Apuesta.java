@@ -49,6 +49,7 @@ public class Apuesta
         this.tipoApuesta = tipoApuesta;
         this.monto = monto;
         this.ruleta = ruleta;
+        this.fechaCreacion = new Date();
     }
 
     public Apuesta(Integer id, String valorApuesta, TipoApuesta tipoApuesta, Double monto) {
@@ -56,5 +57,6 @@ public class Apuesta
         this.valorApuesta = valorApuesta;
         this.tipoApuesta = tipoApuesta;
         this.monto = monto;
+        this.fechaCreacion = new Date();
     }
 }
