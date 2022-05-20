@@ -37,7 +37,6 @@ public class RuletaController
 
     @PutMapping("/apostar")
     public ResponseEntity<?> apostarRuleta(@RequestBody Apuesta apuesta) {
-
         ApuestaDTO apuestaDTO = MapperApuesta.mapApuesta(ruletaDAO.apostar(apuesta));
         return new ResponseEntity<>(apuestaDTO, HttpStatus.ACCEPTED);
     }
@@ -51,11 +50,10 @@ public class RuletaController
     @GetMapping("/listar")
     public ResponseEntity<?> listarRuletas() {
         List<Ruleta> ruletas = (List<Ruleta>) ruletaDAO.buscarTodos();
-        List<RuletaDTO> ruletasDto = ruletas.
-                stream()
+        List<RuletaDTO> ruletasDto = ruletas
+                .stream()
                 .map(MapperRuleta::mapRuleta)
                 .collect(Collectors.toList());
-
         return new ResponseEntity<>(ruletasDto, HttpStatus.ACCEPTED);
     }
 }
