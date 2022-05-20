@@ -37,6 +37,7 @@ public class ApuestaDAOImpl implements ApuestaDAO
     }
 
     @Override
+    @Transactional
     public Apuesta crearApuesta(String valorApuesta, Double monto, Ruleta ruleta) {
         Apuesta apuestaGuardada = null;
         if(validarMontoApuesta(monto)) {
@@ -59,6 +60,7 @@ public class ApuestaDAOImpl implements ApuestaDAO
     }
 
     @Override
+    @Transactional
     public Iterable<Apuesta> calcularResultados(Ruleta ruleta) {
 
         List<Apuesta> apuestas = (List<Apuesta>) buscarApuestasPorRuletaId(ruleta.getId());
@@ -70,8 +72,5 @@ public class ApuestaDAOImpl implements ApuestaDAO
             apuestas.forEach(apuesta -> guardar(calculoApuesta(ruleta,apuesta)));
         }
         return apuestas;
-
     }
-
-
 }

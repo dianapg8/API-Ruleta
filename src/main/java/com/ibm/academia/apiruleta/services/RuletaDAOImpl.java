@@ -7,6 +7,7 @@ import com.ibm.academia.apiruleta.model.entities.Ruleta;
 import com.ibm.academia.apiruleta.repositories.RuletaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,8 @@ import static com.ibm.academia.apiruleta.services.CalculoGanador.generarColorGan
 import static com.ibm.academia.apiruleta.services.CalculoGanador.generarNumeroGanador;
 
 @Service
-public class RuletaDAOImpl implements RuletaDAO {
+public class RuletaDAOImpl implements RuletaDAO
+{
     @Autowired
     ApuestaDAO apuestaDAO;
 
@@ -27,11 +29,13 @@ public class RuletaDAOImpl implements RuletaDAO {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void guardar(Ruleta ruleta) {
         repository.save(ruleta);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Ruleta buscarPorId(Integer id) {
 
         Optional<Ruleta> oRuleta = repository.findById(id);
@@ -46,13 +50,16 @@ public class RuletaDAOImpl implements RuletaDAO {
     }
 
     @Override
-    public Integer crear() {
+    @Transactional
+    public Integer crear()
+    {
         Ruleta ruleta = new Ruleta();
         guardar(ruleta);
         return ruleta.getId();
     }
 
     @Override
+    @Transactional
     public Boolean abrir(Integer id) {
         Ruleta ruleta = buscarPorId(id);
         ruleta.setEstaAbierta(true);
@@ -61,6 +68,7 @@ public class RuletaDAOImpl implements RuletaDAO {
     }
 
     @Override
+    @Transactional
     public Apuesta apostar(Apuesta apuesta) {
         Ruleta ruleta = buscarPorId(apuesta.getId());
         Apuesta nuevaApuesta;
@@ -74,6 +82,7 @@ public class RuletaDAOImpl implements RuletaDAO {
     }
 
     @Override
+    @Transactional
     public void girar(Integer id) {
         Ruleta ruleta = buscarPorId(id);
         Integer numero = generarNumeroGanador();
@@ -83,6 +92,7 @@ public class RuletaDAOImpl implements RuletaDAO {
     }
 
     @Override
+    @Transactional
     public Iterable<Apuesta> cerrar(Integer id) {
         Ruleta ruleta = buscarPorId(id);
         girar(id);
@@ -92,6 +102,7 @@ public class RuletaDAOImpl implements RuletaDAO {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Iterable<Ruleta> buscarTodos() {
         Iterable<Ruleta> ruletas = repository.findAll();
         if(((List<Ruleta>)ruletas).isEmpty()){
@@ -99,6 +110,4 @@ public class RuletaDAOImpl implements RuletaDAO {
         }
         return ruletas;
     }
-
-
 }
