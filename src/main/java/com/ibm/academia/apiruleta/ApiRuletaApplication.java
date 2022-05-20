@@ -1,4 +1,4 @@
-package com.ibm.academia.apiruleta.APIRuleta;
+package com.ibm.academia.apiruleta;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

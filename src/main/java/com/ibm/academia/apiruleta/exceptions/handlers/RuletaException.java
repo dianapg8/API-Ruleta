@@ -19,7 +19,7 @@ public class RuletaException
 {
     @ExceptionHandler(value = ApuestaCancelada.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String,Object> apuestasNoRealizadas(ApuestaCancelada ac){
+    public Map<String,Object> apuestasCanceladas(ApuestaCancelada ac){
         Map<String, Object> response = new HashMap<>();
         response.put("message", ac.getMessage());
         return response;
@@ -27,7 +27,7 @@ public class RuletaException
 
     @ExceptionHandler(value = DatosInvalidos.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String,Object> datosApuestaNoValidos(DatosInvalidos di){
+    public Map<String,Object> datosInvalidos (DatosInvalidos di){
         Map<String, Object> response = new HashMap<>();
         response.put("message", di.getMessage());
         return response;
@@ -35,7 +35,7 @@ public class RuletaException
 
     @ExceptionHandler(value = NoExisteRuleta.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String,Object> ruletaNoExiste(NoExisteRuleta ne){
+    public Map<String,Object> noExisteRuleta(NoExisteRuleta ne){
         Map<String, Object> response = new HashMap<>();
         response.put("message", ne.getMessage());
         return response;

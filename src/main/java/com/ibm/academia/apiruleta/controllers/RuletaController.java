@@ -29,7 +29,7 @@ public class RuletaController
     @Autowired
     RuletaDAO ruletaDAO;
 
-    @Operation(summary = "Crear nueva ruleta", description = "Crea una nueva ruleta en el sistema y retorna su identificador")
+    @Operation(summary = "Crear nueva ruleta", description = "Crea una nueva ruleta y retorna su id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Ruleta creada",
                     content = {@Content(mediaType = "application/json",
@@ -43,16 +43,15 @@ public class RuletaController
         return new ResponseEntity<>(ruletaDAO.crear(), HttpStatus.CREATED);
     }
 
-
-    @Operation(summary = "Abrir ruleta", description = "Cambie el estado de la ruleta y posteriormente permite la creacion de apuestas")
+    @Operation(summary = "Abrir ruleta", description = "Abre la ruleta con dicho id para permitir apuestas en ella")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "La ruleta permite nuevas apuestas",
+            @ApiResponse(responseCode = "202", description = "La ruleta esta abierta a apuestas",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Boolean.class))}),
             @ApiResponse(responseCode = "400", description = "Peticion invalida", content = @Content),
             @ApiResponse(responseCode = "404", description = "La ruleta no existe", content = @Content)
     })
-    @Parameter(name = "ruletaId", required = true, description = "Identificador unico de ruleta")
+    @Parameter(name = "ruletaId", required = true, description = "Id de ruleta")
 
     @PutMapping("/abrir")
     public ResponseEntity<Boolean> abrirRuleta(@RequestParam Integer ruletaId) {
@@ -60,7 +59,7 @@ public class RuletaController
         return new ResponseEntity<>(ruletaDAO.abrir(ruletaId), HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = "Realizar apuesta", description = "Realiza una nueva apuesta a la ruleta seleccionada")
+    @Operation(summary = "Realizar apuesta", description = "Realiza apuesta en la ruleta indicada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Apuesta creada", content =
                     {@Content(mediaType = "application/json",
@@ -68,9 +67,9 @@ public class RuletaController
             @ApiResponse(responseCode = "400", description = "Peticion Invalida", content = @Content)
     })
     @Parameters(value = {
-            @Parameter(name = "idRuleta", description = "Id de ruleta que permita apuestas", required = true),
+            @Parameter(name = "idRuleta", description = "Id de ruleta", required = true),
             @Parameter(name = "valorApuesta", description = "Apuesta numero: 1-36 o Apuesta color: Rojo o Negro", required = true),
-            @Parameter(name = "montoApuesta", description = "Montos menores que 10,000", required = true)
+            @Parameter(name = "montoApuesta", description = "Maximo 10,000", required = true)
     })
 
     @PostMapping("/apostar")
@@ -81,14 +80,14 @@ public class RuletaController
 
     }
 
-    @Operation(summary = "Cierre Apuestas", description = "Calcula todos las apuestas asignadas a una ruleta")
+    @Operation(summary = "Cerrar ruleta", description = "Cierra la ruleta, no acepta apuestas y elige ganador")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Apuestas calculadas",
+            @ApiResponse(responseCode = "202", description = "Ruleta Cerrada",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Apuesta.class))}),
-            @ApiResponse(responseCode = "400", description = "No hay apuestas que calcular", content = @Content)
+            @ApiResponse(responseCode = "400", description = "No se hicieron apuestas", content = @Content)
     })
-    @Parameter(name = "ruletaId", description = "Id de ruleta para calcular sus apuestas")
+    @Parameter(name = "ruletaId", description = "Id de ruleta")
 
     @GetMapping("/cerrar")
     public ResponseEntity<Iterable<Apuesta>> cierreApuestas(@RequestParam Integer ruletaId) {
@@ -96,8 +95,7 @@ public class RuletaController
         return new ResponseEntity<>(ruletaDAO.cerrar(ruletaId), HttpStatus.ACCEPTED);
     }
 
-
-    @Operation(summary = "Listar todas las ruletas", description = "Muestra el Id y estado de las ruletas existentes")
+    @Operation(summary = "Listar todas las ruletas", description = "Lista de ruletas existentes y su estado abierto o cerrado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Lista de ruletas", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = RuletaDTO.class))
@@ -115,6 +113,4 @@ public class RuletaController
 
         return new ResponseEntity<>(ruletasDto, HttpStatus.ACCEPTED);
     }
-
-
 }

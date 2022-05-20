@@ -36,6 +36,6 @@ public class RepositoryTest {
     @Test
     void buscarPorRuletaId() {
         List<Apuesta> apuestas = (List<Apuesta>) repository.buscarApuestasPorRuletaId(1);
-        assertThat(apuestas.size()).isGreaterThan(0);
+        assertThat(apuestas.size()).isEqualTo(0);
     }
 }
